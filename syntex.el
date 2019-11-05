@@ -54,7 +54,7 @@
   (forward-line)
   (open-line 1)
 
-  (insert (concat "\n\\" macro))
+  (insert (concat "\\" macro))
   (cl-loop for arg in arguments do
            (insert "{" arg "}")))
 
