@@ -40,7 +40,7 @@
     (syntex-write-snippet macro figure)))
 
 (defun syntex-list-figures (dir)
-  "List all figures in figure directory DIR; leaving off extensions."
+  "List all figures in figure directory DIR."
   (remove-if-not (lambda (x) (member (file-name-extension x) syntex-figure-extensions))
                  (directory-files dir)))
 
