@@ -58,6 +58,51 @@
   (cl-loop for arg in arguments do
            (insert "{" arg "}")))
 
+(defvar syntex-subfigure-sizes '("\\textwidth" "\\columnwidth" "\\figwidth")
+  "List of default size options for inserting subfigures.")
+
+(defun syntex-insert-subfigure()
+  "Insert subfigures with figure environment.
+Keep adding figures until selected figures is not a member of figure list."
+  (interactive)
+  (forward-line)
+  (open-line 1)
+  (insert "\\begin{figure}[ht]\n\t\\centering\n\n\\end{figure}")
+  (forward-line -2)
+
+  (let* ((figures (strip-extensions (syntex-list-figures "./figures")))
+         (figure "")
+         (sizes syntex-subfigure-sizes)
+         (size "")
+         (add-star-p nil)
+         (star "")
+         (macro "inputsubfigure"))
+
+    (setq figures (push "" figures))
+    (cl-loop do
+             (setq figure (completing-read
+                           "Figure (C-g to exit): "
+                           figures))
+
+             (setq figures (remove-if (lambda (x) (string= x figure))
+                                      figures))
+
+             (setq size (completing-read "Size: "
+                                         sizes))
+
+             (if (not (member size sizes))
+                 (setq sizes (push size sizes)))
+
+             (setq add-star-p (string= "yes" (completing-read
+                                              "Last figure on line?: "
+                                              (list "no" "yes"))))
+
+             (if add-star-p
+                 (setq star "*")
+               (setq star ""))
+
+             (syntex-write-snippet (concat macro star) size figure))))
+
 (defun syntex-insert-table ()
   "Insert new table with inputtable."
   (interactive)
