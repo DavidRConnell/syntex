@@ -20,30 +20,45 @@ Reject (return empty string): `\\[syntex--no-input]' or leave blank and finish")
     (define-key map "\C-c\C-k" #'syntex--no-input)
     map))
 
-(defun syntex--read-from-tmp-buffer ()
-  "Open a temporary buffer in a pop-up window to prompt for input from the user."
+(defun syntex--read-from-tmp-buffer (&optional prompt)
+  "Open a temporary buffer in a pop-up window to prompt for input from the user.
+Present user with optional read only PROMPT at top of buffer."
+  (if prompt
+      (setq prompt (concat prompt "\n\n"))
+    (setq prompt ""))
 
   (let ((tmp-buffer (get-buffer-create "*User Input*"))
         input)
+
     (unwind-protect
-        (progn
-          (pop-to-buffer tmp-buffer)
-          (funcall #'LaTeX-mode)
-          (funcall #'syntex--user-input-mode)
-          (recursive-edit)
-          (setq input (buffer-string)))
+        (if (catch 'save-p
+              (pop-to-buffer tmp-buffer)
+              (syntex--setup-user-input-buffer prompt)
+              (recursive-edit))
+            (setq input (buffer-substring (+ (length prompt) 1) (point-max)))
+          (setq input ""))
       (kill-buffer))
     input))
+
+(defun syntex--setup-user-input-buffer (prompt)
+  "Setup the user input buffer with read-only PROMPT."
+  (funcall #'syntex--user-input-mode)
+
+  (insert prompt)
+  (add-face-text-property (point-min) (length prompt)
+                          '(:weight bold :inherit font-lock-keyword-face))
+  (put-text-property (point-min) (length prompt) 'read-only t))
 
 (defun syntex--add-input ()
   "Return control to main control loop."
   (interactive)
+  (throw 'save-p t)
   (exit-recursive-edit))
 
 (defun syntex--no-input ()
   "Erase buffer then returen control to main control loop."
   (interactive)
-  (erase-buffer)
+  (throw 'save-p nil)
   (exit-recursive-edit))
 
 (provide 'userinput)
