@@ -97,12 +97,12 @@ If the universal arg NO-OPT-P is non-nil do not prompt for captions."
          (size "")
          (add-star-p nil)
          (star "")
-         (macro "\\inputsubfigure")
+         (macro "\t\\inputsubfigure")
          (maincaption (syntex--get-optional-if-arg
                        (not no-opt-p)
                        "Caption for entire set of figures:")))
 
-    (insert "\\caption{" maincaption "}")
+    (insert "\t\\caption{" maincaption "}")
     (forward-line -1)
     (setq figures (push "" figures))
     (cl-loop do
