@@ -42,7 +42,7 @@ If universal arg NO-OPT-P is non-nil do not ask for optional value."
          (caption (syntex--get-optional-if-arg (not no-opt-p)
                                                (concat "Caption for "
                                                        figure ":")))
-         (macro "inputfigure"))
+         (macro "\\inputfigure"))
 
     (syntex--write-snippet macro caption figure)))
 
@@ -70,7 +70,7 @@ Add OPTIONAL value if not empty."
   (forward-line)
   (open-line 1)
 
-  (insert (concat "\\" macro))
+  (insert macro)
 
   (if (not (string-empty-p optional))
       (insert "[" optional "]"))
@@ -97,7 +97,7 @@ If the universal arg NO-OPT-P is non-nil do not prompt for captions."
          (size "")
          (add-star-p nil)
          (star "")
-         (macro "inputsubfigure")
+         (macro "\\inputsubfigure")
          (maincaption (syntex--get-optional-if-arg
                        (not no-opt-p)
                        "Caption for entire set of figures:")))
@@ -145,7 +145,7 @@ If universal arg NO-OPT-P is non-nil do not prompt for caption."
          (caption (syntex--get-optional-if-arg (not no-opt-p)
                                                (concat "Caption for "
                                                        table ":")))
-         (macro "inputtables"))
+         (macro "\\inputtables"))
 
     (syntex--write-snippet macro caption table)))
 
@@ -170,7 +170,7 @@ If universal arg NO-OPT-P non-nil do not prompt for optional section name."
                         (not no-opt-p)
                         (concat "Optional section name (default if blank `"
                                 (capitalize section) "'):")))
-         (macro "inputsections"))
+         (macro "\\inputsections"))
 
     ;; Create file in section directory if it doesn't already exist.
     (if (not (member section sections))
