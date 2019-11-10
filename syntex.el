@@ -157,30 +157,48 @@ If universal arg NO-OPT-P is non-nil do not prompt for caption."
 
     (syntex--strip-extensions files)))
 
-(defun syntex-insert-section (no-opt-p)
-  "Insert new section with inputsection.
-If universal arg NO-OPT-P non-nil do not prompt for optional section name."
-  (interactive "P")
-  (let* ((sections (syntex--list-tex-files "./sections"))
-         (default (car sections))
-         (section (completing-read (concat
-                                    "Section name (default " default "): ")
-                                   sections))
+(defun syntex--insert-section-type (no-opt-p macro dir)
+  "Templaet function for inserting sections, subsections, and appendices.
+MACRO is the macro to insert and DIR is the location the file should be.
+If 'universal-argument' NO-OPT-P is non-nil do not pormpt for optional name."
+  (let* ((files (syntex--list-tex-files (concat "./" dir)))
+         (file (completing-read "File name: " files))
          (display-name (syntex--get-optional-if-arg
                         (not no-opt-p)
-                        (concat "Optional section name (default if blank `"
-                                (capitalize section) "'):")))
-         (macro "\\inputsections"))
+                        (concat "Optional header (default if blank `"
+                                (capitalize file) "') or enter nil for no header:"))))
 
-    ;; Create file in section directory if it doesn't already exist.
-    (if (not (member section sections))
-        (let ((file-name (concat section ".tex")))
+    ;; Create file in directory DIR if it doesn't already exist.
+    (if (not (member file files))
+        (let ((file-name (concat file ".tex")))
           (save-excursion
-            (find-file (concat "./sections/" file-name))
+            (find-file (concat "./" dir "/" file-name))
             (write-file file-name nil)
             (kill-buffer))))
 
-    (syntex--write-snippet macro display-name section)))
+    (if (string-match display-name "nil")
+        (progn
+          (setq display-name "")
+          (setq macro (concat macro "*"))))
+    (syntex--write-snippet macro display-name file)))
+
+(defun syntex-insert-section (no-opt-p)
+  "Insert new section with inputsection.
+If 'universal-arg' NO-OPT-P non-nil do not prompt for optional section name."
+  (interactive "P")
+  (syntex--insert-section-type no-opt-p "\\inputsection" "sections"))
+
+(defun syntex-insert-subsection (no-opt-p)
+  "Insert new subsection with inputsubsection.
+If 'universal-arg' NO-OPT-P non-nil do not prompt for optional section name."
+  (interactive "P")
+  (syntex--insert-section-type no-opt-p "\\inputsubsection" "sections"))
+
+(defun syntex-insert-appendix (no-opt-p)
+  "Insert new appendix with inputappendix.
+If 'universal-arg' NO-OPT-P non-nil do not prompt for optional section name."
+  (interactive "P")
+  (syntex--insert-section-type no-opt-p "\\inputappendix" "appendices"))
 
 (provide 'syntex)
 ;;; syntex.el ends here
