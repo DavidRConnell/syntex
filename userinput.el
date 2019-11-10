@@ -5,20 +5,20 @@
 ;; citation and referencing functions.
 ;;; Code:
 
-(define-minor-mode syntex--user-input-mode
-  "Minor mode for inserting optionals to latex macros."
-  nil " User Input" syntex--user-input-mode-map
-  (setq-local
-   header-line-format
-   (substitute-command-keys
-    "\\<syntex--user-input-mode-map>Accept: `\\[syntex--add-input]', \
-Reject (return empty string): `\\[syntex--no-input]' or leave blank and finish")))
-
 (defvar syntex--user-input-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\C-c\C-c" #'syntex--add-input)
     (define-key map "\C-c\C-k" #'syntex--no-input)
     map))
+
+(define-minor-mode syntex--user-input-mode
+  "Minor mode for inserting optionals to latex macros."
+  nil " User Input" 'syntex--user-input-mode-map
+  (setq-local
+   header-line-format
+   (substitute-command-keys
+    "\\<syntex--user-input-mode-map>Accept: `\\[syntex--add-input]', \
+Reject (return empty string): `\\[syntex--no-input]' or leave blank and finish")))
 
 (defun syntex--read-from-tmp-buffer (&optional prompt)
   "Open a temporary buffer in a pop-up window to prompt for input from the user.
