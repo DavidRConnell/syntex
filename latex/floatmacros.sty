@@ -1,0 +1,140 @@
+% Provides macros for inputting tables and figures taking care of all the
+% redundant information.
+%
+% Commands:
+%   \inputfigure[optional caption]{filename}; file should be in figures dir.
+%   \inputsubfigure[optional caption]{figure size}{filename}; see below for how to use.
+%   \inputtable[optional caption]{filename}; file should be in tables dir.
+%
+% Note: For labeling add \label to the beginning of caption argument.
+%
+% Figure width and table width can be set with \setfigwidth and \settablewidth.
+%
+% For inputsubfigure starred version marks last figure on line.
+% Example of inputting subfigures. Displays a and b over c.
+% \begin{figure}[ht]
+% \centering
+% 	\inputsubfigure[caption a]{0.4\textwidth}{figa}
+% 	\inputsubfigure*[caption b]{0.4\textwidth}{figb}
+% 	\inputsubfigure[caption c]{\figwidth}{figc}
+% \caption{Combine caption}
+% \end{figure}
+
+\ProvidesPackage{floatmacros}
+
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage[font=footnotesize, labelfont=bf]{caption}
+\usepackage{subcaption}
+
+\usepackage{xifthen}
+
+\newlength{\figwidth}
+\setlength{\figwidth}{0.8\columnwidth}
+\newcommand{\setfigwidth}[1]{\setlength{\figwidth}{#1}}
+\newcommand{\inputfigure}[2][]{%
+	\ifthenelse{\isempty{#1}}%
+	{\begin{figure}[ht]
+			\centering
+			\addfigure{\figwidth}{#2}
+		\end{figure}
+	}%
+	{\begin{figure}[ht]
+			\centering
+			\addfigure{\figwidth}{#2}
+			\caption{#1}
+		\end{figure}
+	}
+}
+
+\newcommand{\addfigure}[2]{%
+	\IfFileExists{./figures/#2.tex}{
+		\resizebox{#1}{!}{\input{./figures/#2.tex}}
+	}{\IfFileExists{./figures/#2.pgf}{
+			\resizebox{#1}{!}{\input{./figures/#2.pgf}}
+		}{\includegraphics[width=#1]{./figures/#2}}
+	}}
+
+\captionsetup[subfigure]{%
+	labelformat=simple,
+	labelsep=space,
+	justification=raggedright,
+	singlelinecheck=off
+}
+
+\makeatletter
+\newcommand{\inputsubfigure}{%
+	\Large
+	\@ifstar\@inputsubfigurev\@inputsubfigureh
+}
+
+\newcommand{\@inputsubfigureh}[3][]{
+	\ifthenelse{\isempty{#1}}%
+	{\begin{subfigure}[t]{#2}
+			\centering
+			\addfigure{\textwidth}{#3}
+		\end{subfigure}%
+	}
+	{\begin{subfigure}[t]{#2}
+			\centering
+			\caption{\footnotesize{#1}}
+			\vspace{-1.5em}
+			\addfigure{\textwidth}{#3}
+			\vspace{-1.5em}
+		\end{subfigure}%
+	}
+}
+
+\newcommand{\@inputsubfigurev}[3][]{
+	\ifthenelse{\isempty{#1}}%
+	{\begin{subfigure}[t]{#2}
+			\centering
+			\addfigure{\textwidth}{#3}
+		\end{subfigure}\\
+	}
+	{\begin{subfigure}[t]{#2}
+			\centering
+			\caption{\footnotesize{#1}}
+			\vspace{-1.5em}
+			\addfigure{\textwidth}{#3}
+			\vspace{-1.5em}
+		\end{subfigure}\\
+	}
+}
+
+\makeatother
+
+\usepackage{threeparttable}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\captionsetup[table]{%
+	labelsep=space,
+	justification=raggedright,
+	singlelinecheck=off
+}
+
+\newlength{\tablewidth}
+\setlength{\tablewidth}{\linewidth}
+\newcommand{\settablewidth}[1]{\setlength{\tablewidth}{#1}}
+\newcommand{\inputtable}[2][]{%
+	\ifthenelse{\isempty{#1}}%
+	{\begin{table*}[tb]
+			\centering
+			\large
+			\begin{threeparttable}
+				\input{./tables/#2}
+			\end{threeparttable}
+		\end{table*}
+	}
+
+	{\begin{table*}[tb]
+			\centering
+			\large
+			\begin{threeparttable}
+				\caption{#1}
+				\input{./tables/#2}
+			\end{threeparttable}
+		\end{table*}
+	}
+}

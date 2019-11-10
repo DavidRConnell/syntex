@@ -1,0 +1,57 @@
+% Provides macro for adding sections and appendices.
+%
+% Commands:
+%  inputsection[optional name]{file-name}; file should be located in sections dir
+%  inputsubsection[optional name]{file-name}
+%  inputappendix[optional name]{file-name}; file should be located in appendices dir
+%
+% Starred version of macros do not display header.
+% By default header is the file name (without extension) capitalized. If another
+% header value is preferred such as a two word name it can be specified as an
+% optional argument.
+%
+% Note: the \appendix flag is still needed before adding appendices.
+
+\ProvidesPackage{sectionmacros}
+
+\newcommand{\@inputsectiona}[1]{%
+	\vspace{1em}
+	\input{./sections/#1}
+}
+
+\newcommand{\@inputsectionb}[2][]{%
+	\ifthenelse{\isempty{#1}}%
+	{\section*{\capitalisewords{#2}}\input{./sections/#2}}%
+	{\section*{#1}\input{./sections/#2}}%
+}
+
+\newcommand{\inputsubsection}{%
+	\@ifstar\@inputsubsectiona\@inputsubsectionb
+}
+
+\newcommand{\@inputsubsectiona}[1]{%
+	\vspace{1em}
+	\input{./sections/#1}
+}
+
+\newcommand{\@inputsubsectionb}[2][]{%
+	\ifthenelse{\isempty{#1}}%
+	{\subsection*{\capitalisewords{#2}}\input{./sections/#2}}%
+	{\subsection*{#1}\input{./sections/#2}}%
+}
+
+\newcommand{\inputappendix}{%
+	\@ifstar\@inputappendixa\@inputappendixb
+}
+
+\newcommand{\@inputappendixa}[1]{%
+	\vspace{1em}
+	\input{./appendices/#1}
+}
+
+\newcommand{\@inputappendixb}[2][]{%
+	\ifthenelse{\isempty{#1}}%
+	{\section{\capitalisewords{#2}}\input{./appendices/#2}}%
+	{\section{#1}\input{./appendices/#2}}%
+}
+\makeatother
