@@ -31,7 +31,7 @@
 
 (defun syntex-insert-figure (no-opt-p)
   "Insert new figure with inputfigure.
-If universal arg NO-OPT-P is non-nil do not ask for optional value."
+If 'universal-arg' NO-OPT-P is non-nil do not ask for optional value."
   (interactive "P")
   (let* ((figures (syntex--strip-extensions
                    (syntex--list-figures "./figures")))
@@ -58,7 +58,7 @@ If universal arg NO-OPT-P is non-nil do not ask for optional value."
 
 (defun syntex--get-optional-if-arg (arg &optional prompt)
   "Prompt user to enter an optional value.
-If universal arg ARG is nil skip prompt and return an empty string.
+If 'universal-arg' ARG is nil skip prompt and return an empty string.
 Optional PROMPT provides instructions to the top of the input buffer."
   (if arg
       (syntex--read-from-tmp-buffer prompt)
@@ -83,7 +83,7 @@ Add OPTIONAL value if not empty."
 (defun syntex-insert-subfigure (no-opt-p)
   "Insert subfigures with figure environment.
 Keep adding figures until selected figures is not a member of figure list.
-If the universal arg NO-OPT-P is non-nil do not prompt for captions."
+If the 'universal-arg' NO-OPT-P is non-nil do not prompt for captions."
   (interactive "P")
   (forward-line)
   (open-line 1)
@@ -135,7 +135,7 @@ If the universal arg NO-OPT-P is non-nil do not prompt for captions."
 
 (defun syntex-insert-table (no-opt-p)
   "Insert new table with inputtable.
-If universal arg NO-OPT-P is non-nil do not prompt for caption."
+If 'universal-arg' NO-OPT-P is non-nil do not prompt for caption."
   (interactive "P")
   (let* ((tables (syntex--list-tex-files "./tables"))
          (default (car tables))
