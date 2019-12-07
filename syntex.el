@@ -110,7 +110,7 @@ If the 'universal-arg' NO-OPT-P is non-nil do not prompt for captions."
   (interactive "P")
   (forward-line)
   (open-line 1)
-  (insert "\\begin{figure}[ht]\n\t\\centering\n\n\\end{figure}")
+  (insert "\\begin{figure}[ht]\n\t\\centering\n\\end{figure}")
   (forward-line -1)
 
   (let* ((figures (syntex--find-figures-for-completion))
@@ -124,8 +124,12 @@ If the 'universal-arg' NO-OPT-P is non-nil do not prompt for captions."
                        (not no-opt-p)
                        "Caption for entire set of figures:")))
 
-    (insert "\t\\caption{" maincaption "}")
-    (forward-line -1)
+    (if (not (string-empty-p maincaption))
+        (progn
+          (forward-line)
+          (open-line 1)
+          (insert "\t\\caption{" maincaption "}")
+          (forward-line -1)))
     (setq figures (push "" figures))
     (cl-loop do
              (setq figure (completing-read
