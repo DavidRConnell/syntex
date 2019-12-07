@@ -25,6 +25,14 @@ Striping extra white space."
   (replace-regexp-in-string
    "[\t\n ]+" " " (match-string index)))
 
+(defun syntex--find-regexp-in-project (regexp index)
+  "Search project for the INDEXth subexpression of REGEXP.
+FIXME: Only searches current file; fix to search entire project."
+  (save-excursion
+    (goto-char (point-min))
+    (cl-loop while (search-forward-regexp regexp nil t)
+             collect (syntex--index-last-match index))))
+
 ;;; Citations
 (defvar syntex-bib-regex (concat "^@\\([a-zA-Z0-9]*\\){"
                                  "\\([^,]*\\),\n"
