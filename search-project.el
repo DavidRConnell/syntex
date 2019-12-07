@@ -57,7 +57,8 @@ FIXME: Only searches current file; fix to search entire project."
              collect (list (syntex--index-last-match 4) (syntex--index-last-match 2)))))
 
 (defun syntex--bib-file ()
-  "Find the bib file used in called in the main file."
+  "Find the bib file called in the main file.
+TODO: Extend to work with multiple bib files"
   (with-temp-buffer
     (insert-file-contents (syntex--main-file))
     (search-forward-regexp "^[ \t]*\\\\bibliography{\\([^}]*\\)}" nil t)
