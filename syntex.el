@@ -100,7 +100,7 @@ Add OPTIONAL value if not empty."
   (cl-loop for arg in arguments do
            (insert "{" arg "}")))
 
-(defvar syntex-subfigure-sizes '("\\textwidth" "\\columnwidth" "\\figwidth")
+(defvar syntex-default-subfigure-sizes '("\\textwidth" "\\columnwidth" "\\figwidth")
   "List of default size options for inserting subfigures.")
 
 (defun syntex-insert-subfigure (no-opt-p)
@@ -115,7 +115,7 @@ If the 'universal-arg' NO-OPT-P is non-nil do not prompt for captions."
 
   (let* ((figures (syntex--find-figures-for-completion))
          (figure "")
-         (sizes syntex-subfigure-sizes)
+         (sizes syntex-default-subfigure-sizes)
          (size "")
          (add-star-p nil)
          (star "")
