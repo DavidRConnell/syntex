@@ -33,22 +33,41 @@
 (defvar syntex-figure-extensions '("tex" "pgf" "svg" "png" "jpeg")
   "List of extensions to look for in figure directory.")
 
+(defvar syntex-complete-inserted-elements nil
+  "If non-nil do include already used elements (figures, sections, etc) in completion.")
+
 (defun syntex-insert-figure (no-opt-p)
   "Insert new figure with inputfigure.
 If 'universal-arg' NO-OPT-P is non-nil do not ask for optional value."
   (interactive "P")
-  (let* ((figures (syntex--strip-extensions
-                   (syntex--list-figures "./figures")))
-         (default (car figures))
-         (figure (completing-read (concat "Figure (default "
-                                               default "): ")
+  (let* ((figures (syntex--find-figures-for-completion))
+         (figure (completing-read "Figure: "
                                   figures))
+
          (caption (syntex--get-optional-if-arg (not no-opt-p)
                                                (concat "Caption for "
                                                        figure ":")))
          (macro "\\inputfigure"))
 
     (syntex--write-snippet macro caption figure)))
+
+(defvar syntex--figure-name-regex (concat
+                                   "\\\\input\\(sub\\)?figure\\({[^}]*}\\)?{\\([^}]*\\)}"))
+
+(defun syntex--find-figures-for-completion ()
+  "Return figures for completion.
+If `syntex-complete-inserted-elements' is non-nil return all figures; otherwise,
+return only those that have not yet been used in the project."
+  (let ((figures (syntex--strip-extensions
+                  (syntex--list-figures "./figures"))))
+
+       (if syntex-complete-inserted-elements
+           figures
+         (remove-if (lambda (figure)
+                      (member figure
+                              (syntex--find-regexp-in-project
+                               syntex--figure-name-regex 3)))
+                    figures))))
 
 (defun syntex--list-figures (dir)
   "List all figures in figure directory DIR."
@@ -94,8 +113,7 @@ If the 'universal-arg' NO-OPT-P is non-nil do not prompt for captions."
   (insert "\\begin{figure}[ht]\n\t\\centering\n\n\\end{figure}")
   (forward-line -1)
 
-  (let* ((figures (syntex--strip-extensions
-                   (syntex--list-figures "./figures")))
+  (let* ((figures (syntex--find-figures-for-completion))
          (figure "")
          (sizes syntex-subfigure-sizes)
          (size "")
