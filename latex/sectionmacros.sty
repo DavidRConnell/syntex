@@ -14,6 +14,15 @@
 
 \ProvidesPackage{sectionmacros}
 
+\usepackage{xifthen}
+\usepackage{mfirstuc}
+
+\makeatletter
+
+\newcommand{\inputsection}{%
+	\@ifstar\@inputsectiona\@inputsectionb
+}
+
 \newcommand{\@inputsectiona}[1]{%
 	\vspace{1em}
 	\input{./sections/#1}
