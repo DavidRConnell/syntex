@@ -61,7 +61,7 @@ FIXME: Only searches current file; fix to search entire project."
   (with-temp-buffer
     (insert-file-contents (syntex--main-file))
     (search-forward-regexp "^[ \t]*\\\\bibliography{\\([^}]*\\)}" nil t)
-    (syntex--index-last-match 1)))
+    (concat (syntex--index-last-match 1) ".bib")))
 
 (provide 'search-project)
 ;;; search-project.el ends here
