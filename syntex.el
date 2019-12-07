@@ -4,6 +4,9 @@
 ;;
 ;;; Code:
 
+(require 'popup)
+(require 'subr-x)
+(require 'cl-seq)
 (require 'userinput "~/projects/syntex/userinput.el")
 
 (defun syntex-insert-emph ()
