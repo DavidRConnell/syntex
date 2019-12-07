@@ -46,7 +46,7 @@ FIXME: Only searches current file; fix to search entire project."
          (citation (completing-read "Citation title: "
                    (mapcar #'car reference-alist))))
 
-    (forward-line 1)
+    (forward-char 1)
     (insert "\\cite{" (second (assoc citation reference-alist)) "}")))
 
 (defun syntex--parse-bib-file ()
