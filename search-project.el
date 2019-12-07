@@ -5,14 +5,18 @@
 ;;; Find files
 (defun syntex--main-file ()
   "Find main file in project.
-Main file defined as the .tex file with the same name as the project's root dir.
-TODO: Remove dependency on projectile."
-  (let* ((project-name (projectile-project-root))
+Main file defined as the .tex file with the same name as the project's root dir."
+  (let* ((project-name (syntex--project-root))
          (file-name-san-ext (car (last (remove-if
                                         #'string-empty-p
                                         (split-string project-name "/"))))))
 
     (concat project-name file-name-san-ext ".tex")))
+
+(defun syntex--project-root ()
+  "Find the current project's root file.
+TODO: Remove dependency on projectile."
+  (projectile-project-root))
 
 ;;; Macro Matching
 (defun syntex--index-last-match (index)
