@@ -38,7 +38,7 @@
 
 (defun syntex-insert-figure (no-opt-p)
   "Insert new figure with inputfigure.
-If 'universal-arg' NO-OPT-P is non-nil do not ask for optional value."
+If `universal-argument' NO-OPT-P is non-nil do not ask for optional value."
   (interactive "P")
   (let* ((figures (syntex--find-figures-for-completion))
          (figure (completing-read "Figure: "
@@ -81,7 +81,7 @@ return only those that have not yet been used in the project."
 
 (defun syntex--get-optional-if-arg (arg &optional prompt)
   "Prompt user to enter an optional value.
-If 'universal-arg' ARG is nil skip prompt and return an empty string.
+If `universal-argument' ARG is nil skip prompt and return an empty string.
 Optional PROMPT provides instructions to the top of the input buffer."
   (if arg
       (syntex--read-from-tmp-buffer prompt)
@@ -106,7 +106,7 @@ Add OPTIONAL value if not empty."
 (defun syntex-insert-subfigure (no-opt-p)
   "Insert subfigures with figure environment.
 Keep adding figures until selected figures is not a member of figure list.
-If the 'universal-arg' NO-OPT-P is non-nil do not prompt for captions."
+If the `universal-argument' NO-OPT-P is non-nil do not prompt for captions."
   (interactive "P")
   (forward-line)
   (open-line 1)
@@ -130,6 +130,7 @@ If the 'universal-arg' NO-OPT-P is non-nil do not prompt for captions."
           (open-line 1)
           (insert "\t\\caption{" maincaption "}")
           (forward-line -1)))
+
     (setq figures (push "" figures))
     (cl-loop do
              (setq figure (completing-read
@@ -161,7 +162,7 @@ If the 'universal-arg' NO-OPT-P is non-nil do not prompt for captions."
 
 (defun syntex-insert-table (no-opt-p)
   "Insert new table with inputtable.
-If 'universal-arg' NO-OPT-P is non-nil do not prompt for caption."
+If `universal-argument' NO-OPT-P is non-nil do not prompt for caption."
   (interactive "P")
   (let* ((tables (syntex--list-tex-files "./tables"))
          (default (car tables))
@@ -186,7 +187,7 @@ If 'universal-arg' NO-OPT-P is non-nil do not prompt for caption."
 (defun syntex--insert-section-type (no-opt-p macro dir)
   "Templaet function for inserting sections, subsections, and appendices.
 MACRO is the macro to insert and DIR is the location the file should be.
-If 'universal-argument' NO-OPT-P is non-nil do not pormpt for optional name."
+If `universal-argument' NO-OPT-P is non-nil do not pormpt for optional name."
   (let* ((files (syntex--list-tex-files (concat "./" dir)))
          (file (completing-read "File name: " files))
          (display-name (syntex--get-optional-if-arg
@@ -210,19 +211,19 @@ If 'universal-argument' NO-OPT-P is non-nil do not pormpt for optional name."
 
 (defun syntex-insert-section (no-opt-p)
   "Insert new section with inputsection.
-If 'universal-arg' NO-OPT-P non-nil do not prompt for optional section name."
+If `universal-argument' NO-OPT-P non-nil do not prompt for optional section name."
   (interactive "P")
   (syntex--insert-section-type no-opt-p "\\inputsection" "sections"))
 
 (defun syntex-insert-subsection (no-opt-p)
   "Insert new subsection with inputsubsection.
-If 'universal-arg' NO-OPT-P non-nil do not prompt for optional section name."
+If `universal-argument' NO-OPT-P non-nil do not prompt for optional section name."
   (interactive "P")
   (syntex--insert-section-type no-opt-p "\\inputsubsection" "sections"))
 
 (defun syntex-insert-appendix (no-opt-p)
   "Insert new appendix with inputappendix.
-If 'universal-arg' NO-OPT-P non-nil do not prompt for optional section name."
+If `universal-argument' NO-OPT-P non-nil do not prompt for optional section name."
   (interactive "P")
   (syntex--insert-section-type no-opt-p "\\inputappendix" "appendices"))
 
