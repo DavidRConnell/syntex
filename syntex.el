@@ -8,6 +8,7 @@
 (require 'subr-x)
 (require 'cl-seq)
 (require 'userinput "~/projects/syntex/userinput.el")
+(require 'search-project "~/projects/syntex/search-project.el")
 
 (defun syntex-insert-emph ()
   "Insert emph snippet."
