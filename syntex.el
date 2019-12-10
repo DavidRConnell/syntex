@@ -66,22 +66,22 @@ If `universal-argument' NO-OPT-P is non-nil do not ask for optional value."
 
     (syntex--write-snippet macro caption figure)))
 
-(defvar syntex--figure-name-regex (concat
-                                   "\\\\input\\(sub\\)?figure\\({[^}]*}\\)?{\\([^}]*\\)}"))
+(defvar syntex--figure-name-regex
+  "\\\\input\\(sub\\)?figure\\(\\[.*\\]\\)?\\({[^}]*}\\)?{\\([^}]*\\)}")
 
 (defun syntex--find-figures-for-completion ()
   "Return figures for completion.
 If `syntex-complete-inserted-elements' is non-nil return all figures; otherwise,
 return only those that have not yet been used in the project."
   (let ((figures (syntex--strip-extensions
-                  (syntex--list-figures (concat (syntex--project-root) "/figures")))))
+                  (syntex--list-figures (concat (syntex--project-root) "figures")))))
 
        (if syntex-complete-inserted-elements
            figures
          (remove-if (lambda (figure)
                       (member figure
-                              (syntex--find-regexp-in-project
-                               syntex--figure-name-regex 3)))
+                              (syntex--regexp-search-tex-files
+                               syntex--figure-name-regex 4)))
                     figures))))
 
 (defun syntex--list-figures (dir)
