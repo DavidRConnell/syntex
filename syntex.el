@@ -13,22 +13,31 @@
 (defun syntex-insert-emph ()
   "Insert emph snippet."
   (interactive)
-  (insert "\\emph{}"))
+  (insert "\\emph{}")
+  (goto-char (- (point) 1))
+  (evil-insert-state))
 
 (defun syntex-insert-bold ()
   "Insert bold snippet."
   (interactive)
-  (insert "\\textbf{}"))
+  (insert "\\textbf{}")
+  (goto-char (- (point) 1))
+  (evil-insert-state))
 
 (defun syntex-insert-italic ()
   "Insert italic snippet."
   (interactive)
-  (insert "\\textit{}"))
+  (insert "\\textit{}")
+  (goto-char (- (point) 1))
+  (evil-insert-state))
 
 (defun syntex-insert-label ()
   "Insert label snippet."
   (interactive)
-  (insert "\\label{}"))
+  (insert "\\label{}")
+  (goto-char (- (point) 1))
+  (evil-insert-state))
+
 
 (defvar syntex-figure-extensions '("tex" "pgf" "svg" "png" "jpeg")
   "List of extensions to look for in figure directory.")
