@@ -38,6 +38,12 @@
   (goto-char (- (point) 1))
   (evil-insert-state))
 
+(defun syntex-insert-ref ()
+  "Insert a cross-reference."
+  (interactive)
+  (let* ((labels (syntex--regexp-search-tex-files "\\\\label{\\([^}]*\\)}" 1))
+         (label (completing-read "Label: " labels)))
+    (syntex--write-snippet "\\autoref" "" label)))
 
 (defvar syntex-figure-extensions '("tex" "pgf" "svg" "png" "jpeg")
   "List of extensions to look for in figure directory.")
