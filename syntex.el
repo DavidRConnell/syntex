@@ -59,7 +59,7 @@ If `universal-argument' NO-OPT-P is non-nil do not ask for optional value."
 If `syntex-complete-inserted-elements' is non-nil return all figures; otherwise,
 return only those that have not yet been used in the project."
   (let ((figures (syntex--strip-extensions
-                  (syntex--list-figures "./figures"))))
+                  (syntex--list-figures (concat (syntex--project-root) "/figures")))))
 
        (if syntex-complete-inserted-elements
            figures
@@ -164,7 +164,8 @@ If the `universal-argument' NO-OPT-P is non-nil do not prompt for captions."
   "Insert new table with inputtable.
 If `universal-argument' NO-OPT-P is non-nil do not prompt for caption."
   (interactive "P")
-  (let* ((tables (syntex--list-tex-files "./tables"))
+  (let* ((tables (syntex--list-tex-files (concat
+                                          (syntex--project-root) "tables")))
          (default (car tables))
          (table (completing-read (concat "Table (default "
                                                default "): ")
@@ -188,7 +189,7 @@ If `universal-argument' NO-OPT-P is non-nil do not prompt for caption."
   "Templaet function for inserting sections, subsections, and appendices.
 MACRO is the macro to insert and DIR is the location the file should be.
 If `universal-argument' NO-OPT-P is non-nil do not pormpt for optional name."
-  (let* ((files (syntex--list-tex-files (concat "./" dir)))
+  (let* ((files (syntex--list-tex-files (concat (syntex--project-root) dir)))
          (file (completing-read "File name: " files))
          (display-name (syntex--get-optional-if-arg
                         (not no-opt-p)
