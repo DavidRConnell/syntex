@@ -21,12 +21,12 @@
   (insert "\\textbf{}"))
 
 (defun syntex-insert-italic ()
-  "Insert bold snippet."
+  "Insert italic snippet."
   (interactive)
   (insert "\\textit{}"))
 
 (defun syntex-insert-label ()
-  "Insert bold snippet."
+  "Insert label snippet."
   (interactive)
   (insert "\\label{}"))
 
