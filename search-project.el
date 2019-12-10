@@ -25,11 +25,24 @@ Striping extra white space."
   (replace-regexp-in-string
    "[\t\n ]+" " " (match-string index)))
 
-(defun syntex--find-regexp-in-project (regexp index)
+(defvar syntex-tex-directories '("" "sections")
+  "List of directories to search in for .tex files relative to root dir.")
+
+(defun syntex--regexp-search-tex-files (regexp index)
   "Search project for the INDEXth subexpression of REGEXP.
-FIXME: Only searches current file; fix to search entire project."
-  (save-excursion
-    (goto-char (point-min))
+Only searches tex files under directories in syntex-tex-directories list."
+  (let* ((results '()))
+    (cl-loop for dir in syntex-tex-directories do
+             (let ((absdir (concat (syntex--project-root) dir "/")))
+               (cl-loop for file in (syntex--list-tex-files absdir) do
+                        (setq results (nunion results (syntex--search-file
+                                        (concat absdir file ".tex") regexp index))))))
+    results))
+
+(defun syntex--search-file (file regexp index)
+  "Search FILE for the INDEXth subexpression of REGEXP."
+  (with-temp-buffer
+    (insert-file-contents file)
     (cl-loop while (search-forward-regexp regexp nil t)
              collect (syntex--index-last-match index))))
 
