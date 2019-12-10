@@ -25,7 +25,7 @@ Striping extra white space."
   (replace-regexp-in-string
    "[\t\n ]+" " " (match-string index)))
 
-(defvar syntex-tex-directories '("" "sections")
+(defvar syntex-tex-directories '("" "sections" "appendices")
   "List of directories to search in for .tex files relative to root dir.")
 
 (defun syntex--regexp-search-tex-files (regexp index)
